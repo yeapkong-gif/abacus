@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's Learn the Abacus!</title>
+<meta name="description" content="A fun abacus learning adventure for young children.">
+<meta name="theme-color" content="#154F4C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Abacus">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wood:#8B5A2B;
+    --wood-dark:#6B431E;
+    --paper:#FAF3E3;
+    --paper-deep:#F1E6CC;
+    --teal:#1F6F6B;
+    --teal-deep:#154F4C;
+    --gold:#E8A33D;
+    --coral:#D6533B;
+    --ink:#2B2620;
+    --ok:#3F8F5B;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Nunito',sans-serif;
+    line-height:1.55;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+  h1{font-size:clamp(2rem,6vw,3.2rem); margin:0 0 6px; color:var(--teal-deep);}
+  h2{font-size:clamp(1.4rem,4vw,1.9rem); color:var(--teal-deep); margin:0 0 4px;}
+  h3{font-size:1.15rem;color:var(--wood-dark); margin:0 0 6px;}
+  p{margin:0 0 12px;}
+  section{max-width:820px; margin:0 auto; padding:36px 20px;}
+  .hero{
+    background:linear-gradient(180deg,var(--teal) 0%, var(--teal-deep) 100%);
+    color:#fff;
+    padding:44px 20px 40px;
+    text-align:center;
+    border-bottom:6px solid var(--gold);
+  }
+  .hero h1{color:#fff;}
+  .hero p.sub{color:#E4F2F0; font-size:1.05rem; max-width:520px; margin:0 auto 22px;}
+  .badge{
+    display:inline-block; background:var(--gold); color:var(--wood-dark);
+    font-family:'Baloo 2'; font-weight:700; font-size:.8rem;
+    padding:4px 12px; border-radius:20px; margin:0 4px 10px;
+    letter-spacing:.3px;
+  }
+  nav.jump{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    max-width:820px; margin:0 auto; padding:14px 20px 0;
+  }
+  nav.jump a{
+    font-family:'Baloo 2'; font-size:.85rem; text-decoration:none;
+    color:var(--teal-deep); background:#fff; border:2px solid var(--paper-deep);
+    padding:6px 12px; border-radius:14px;
+  }
+  nav.jump a:hover{border-color:var(--gold);}
+
+  .tag{
+    display:inline-block; font-family:'Baloo 2'; font-weight:700; font-size:.72rem;
+    padding:3px 10px; border-radius:10px; margin-bottom:10px; letter-spacing:.3px;
+  }
+  .tag.five{background:#FDE4D6; color:var(--coral);}
+  .tag.seven{background:#D9EDE8; color:var(--teal-deep);}
+  .tag.both{background:#FBE9C6; color:var(--wood-dark);}
+
+  .card{
+    background:#fff; border-radius:18px; padding:22px 22px 20px;
+    box-shadow:0 3px 0 var(--paper-deep); margin-bottom:18px;
+  }
+  .tip{
+    background:#FFF7E6; border-left:5px solid var(--gold);
+    border-radius:8px; padding:12px 16px; margin:14px 0; font-size:.95rem;
+  }
+  .tip b{color:var(--wood-dark);}
+  .say{
+    background:#EEF7F5; border-left:5px solid var(--teal);
+    border-radius:8px; padding:12px 16px; margin:14px 0; font-size:.95rem;
+  }
+  .say b{color:var(--teal-deep);}
+
+  /* ---- Abacus widget (realistic) ---- */
+  .abacus-wrap{ display:flex; flex-direction:column; align-items:center; gap:10px; margin:18px 0;}
+  .abacus-frame{
+    position:relative;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,.06) 0 2px, transparent 2px 6px),
+      linear-gradient(180deg,#A16A34,#7C4E24 60%,#6B431E);
+    border-radius:14px; padding:22px 24px 18px;
+    box-shadow:0 8px 0 var(--wood-dark), 0 14px 22px rgba(0,0,0,.28);
+    display:flex; gap:22px; align-items:flex-end;
+    border:3px solid #5C3A1B;
+  }
+  .abacus-frame::before, .abacus-frame::after{
+    content:''; position:absolute; left:10px; right:10px; height:8px;
+    background:linear-gradient(180deg,#B98545,#8A5A29);
+    border-radius:4px; box-shadow:inset 0 -2px 3px rgba(0,0,0,.35), inset 0 2px 2px rgba(255,255,255,.2);
+  }
+  .abacus-frame::before{ top:6px; }
+  .abacus-frame::after{ bottom:6px; }
+  .rod-block{ display:flex; flex-direction:column; align-items:center; }
+  .rod-label{ color:#F6E8CE; font-family:'Baloo 2'; font-size:.75rem; margin-bottom:6px; letter-spacing:.5px; text-shadow:0 1px 1px rgba(0,0,0,.4);}
+  .rod{
+    position:relative; width:40px; height:230px;
+  }
+  .rod::before{
+    content:''; position:absolute; left:50%; top:0; bottom:0; width:5px; transform:translateX(-50%);
+    background:linear-gradient(90deg,#8a8a8a,#e8e8e8 45%,#8a8a8a);
+    border-radius:3px; box-shadow:0 0 2px rgba(0,0,0,.5);
+  }
+  .bar-line{
+    position:absolute; left:-14px; right:-14px; top:56px; height:3px;
+    background:repeating-linear-gradient(90deg,#3a2a18 0 6px, #2b2015 6px 8px);
+    border-radius:2px; opacity:.8; z-index:2;
+  }
+  .zone{ position:absolute; left:0; right:0; display:flex; flex-direction:column; align-items:center;}
+  .zone-active{ top:0; height:56px; justify-content:flex-end; }
+  .zone-inactive{ top:60px; bottom:0; justify-content:flex-start; }
+  .bead{
+    position:relative; width:42px; height:28px; border-radius:50%;
+    margin:1px 0; cursor:pointer;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 42%),
+      radial-gradient(circle at 68% 78%, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 55%),
+      var(--bead-color, #D6533B);
+    box-shadow: inset -3px -4px 6px rgba(0,0,0,.35), inset 3px 3px 5px rgba(255,255,255,.35), 0 3px 4px rgba(0,0,0,.25);
+    transition:transform .12s ease;
+  }
+  .bead::after{
+    content:''; position:absolute; left:50%; top:0; bottom:0; width:6px; transform:translateX(-50%);
+    background:rgba(30,20,10,.55); border-radius:3px;
+  }
+  .bead:hover{ transform:scale(1.06); }
+  .rod-total{
+    margin-top:8px; font-family:'Baloo 2'; font-weight:700; font-size:1.1rem; color:#fff;
+    background:rgba(0,0,0,.25); padding:2px 10px; border-radius:10px;
+  }
+  .abacus-readout{
+    font-family:'Baloo 2'; font-weight:800; text-align:center;
+    color:var(--teal-deep);
+  }
+  .abacus-readout .num{ font-size:2.4rem; display:block; }
+  .abacus-readout .lbl{ font-size:.8rem; color:var(--wood-dark); letter-spacing:.5px;}
+  .reset-btn{
+    font-family:'Baloo 2'; font-weight:700; background:var(--coral); color:#fff;
+    border:none; padding:8px 18px; border-radius:20px; cursor:pointer; font-size:.85rem;
+    box-shadow:0 3px 0 #a53a26;
+  }
+  .reset-btn:active{ transform:translateY(2px); box-shadow:none;}
+
+  .steps{ counter-reset:step; list-style:none; padding:0; margin:0 0 12px;}
+  .steps li{
+    counter-increment:step; position:relative; padding-left:38px; margin-bottom:10px;
+  }
+  .steps li::before{
+    content:counter(step); position:absolute; left:0; top:0;
+    width:26px; height:26px; border-radius:50%; background:var(--teal);
+    color:#fff; font-family:'Baloo 2'; font-weight:700; font-size:.85rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  table.cheat{ width:100%; border-collapse:collapse; font-size:.92rem;}
+  table.cheat th, table.cheat td{ text-align:left; padding:8px 10px; border-bottom:1px solid var(--paper-deep);}
+  table.cheat th{ font-family:'Baloo 2'; color:var(--teal-deep); }
+
+  .game-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+  @media(min-width:600px){ .game-grid{ grid-template-columns:1fr 1fr; } }
+  .game-card{ background:var(--paper-deep); border-radius:14px; padding:16px 18px;}
+
+  footer{ text-align:center; color:var(--wood-dark); font-size:.85rem; padding:30px 20px 0; }
+
+  .divider{ text-align:center; margin:6px 0 26px; color:var(--gold); font-size:1.3rem; letter-spacing:10px;}
+
+  /* ---- Learner bar ---- */
+  .learner-bar{
+    position:sticky; top:0; z-index:40;
+    background:var(--teal-deep); color:#fff;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center;
+    padding:10px 16px; font-family:'Baloo 2';
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+  }
+  .learner-bar select, .learner-bar input{
+    font-family:'Nunito'; font-size:.9rem; padding:6px 10px; border-radius:10px; border:none;
+  }
+  .learner-bar button{
+    font-family:'Baloo 2'; font-weight:700; font-size:.85rem; border:none; cursor:pointer;
+    padding:7px 14px; border-radius:12px;
+  }
+  .btn-gold{ background:var(--gold); color:var(--wood-dark); }
+  .btn-outline{ background:transparent; color:#fff; border:2px solid rgba(255,255,255,.5) !important; }
+  .learner-status{ font-size:.85rem; color:#E4F2F0; }
+  .new-learner-form{ display:none; gap:8px; align-items:center; flex-wrap:wrap; }
+  .new-learner-form.open{ display:flex; }
+  .storage-note{
+    text-align:center; font-size:.75rem; color:#CFE7E3; padding:4px 16px 10px; background:var(--teal-deep);
+  }
+
+  /* ---- Practice / exercises ---- */
+  .exercise{
+    background:#fff; border-radius:18px; padding:20px 20px 18px; margin-bottom:20px;
+    box-shadow:0 3px 0 var(--paper-deep);
+  }
+  .exercise .problem{
+    font-family:'Baloo 2'; font-size:1.3rem; color:var(--teal-deep); margin-bottom:10px;
+  }
+  .exercise-controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px;}
+  .btn-check{ background:var(--teal); color:#fff; }
+  .btn-next{ background:var(--wood); color:#fff; }
+  .feedback{ font-family:'Baloo 2'; font-weight:700; min-height:1.4em; margin-top:8px; }
+  .feedback.correct{ color:var(--ok); }
+  .feedback.wrong{ color:var(--coral); }
+  .score-line{ font-size:.85rem; color:var(--wood-dark); margin-top:8px; }
+  .locked-msg{
+    background:#FFF7E6; border:2px dashed var(--gold); border-radius:14px;
+    padding:20px; text-align:center; font-family:'Baloo 2'; color:var(--wood-dark);
+  }
+
+  /* ---- Dashboard modal ---- */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(43,38,32,.55); z-index:60;
+    align-items:flex-start; justify-content:center; padding:30px 14px; overflow-y:auto;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:#fff; border-radius:18px; padding:22px; max-width:760px; width:100%;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+  }
+  .modal-box h2{ margin-bottom:12px; }
+  .modal-close{
+    float:right; background:var(--coral); color:#fff; border:none; border-radius:10px;
+    font-family:'Baloo 2'; font-weight:700; padding:6px 14px; cursor:pointer;
+  }
+  table.dash{ width:100%; border-collapse:collapse; font-size:.85rem; margin-top:10px;}
+  table.dash th, table.dash td{ padding:7px 8px; border-bottom:1px solid var(--paper-deep); text-align:center;}
+  table.dash th{ font-family:'Baloo 2'; color:var(--teal-deep); font-size:.75rem;}
+  table.dash td:first-child, table.dash th:first-child{ text-align:left; }
+
+  /* ---- Celebration (confetti + applause banner) ---- */
+  #celebrateCanvas{
+    position:fixed; inset:0; pointer-events:none; z-index:90; display:none;
+  }
+  .cheer-banner{
+    position:fixed; top:18%; left:50%; transform:translate(-50%,-20px) scale(.7);
+    font-family:'Baloo 2'; font-weight:800; font-size:2.2rem; color:var(--teal-deep);
+    background:#fff; padding:14px 28px; border-radius:20px; z-index:91;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .cheer-banner.show{ opacity:1; transform:translate(-50%,0) scale(1); }
+
+  .hero-logo{
+    display:block; margin:0 auto 14px; border-radius:50%;
+    box-shadow:0 6px 18px rgba(0,0,0,.3); background:#fff;
+  }
+
+  /* ---- Kid-friendly Level Journey ---- */
+  .journey-map{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:10px 0 24px;
+  }
+  .level-dot{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    font-family:'Baloo 2'; font-size:.72rem; color:var(--wood-dark); width:78px; text-align:center;
+  }
+  .level-dot .circle{
+    width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; background:#fff; border:3px solid var(--paper-deep); transition:all .2s;
+  }
+  .level-dot.done .circle{ background:var(--ok); border-color:var(--ok); color:#fff; }
+  .level-dot.current .circle{ background:var(--gold); border-color:var(--wood-dark); transform:scale(1.12); box-shadow:0 4px 10px rgba(0,0,0,.2); }
+  .level-dot.locked .circle{ opacity:.45; }
+
+  .level-card{
+    background:#fff; border-radius:22px; padding:24px 22px 22px; text-align:center;
+    box-shadow:0 4px 0 var(--paper-deep); border:3px solid var(--gold);
+  }
+  .level-card h3{ font-size:1.5rem; color:var(--teal-deep); margin-bottom:2px;}
+  .level-sub{ font-size:.9rem; color:var(--wood-dark); margin-bottom:6px;}
+  .progress-track{ height:14px; background:var(--paper-deep); border-radius:8px; overflow:hidden; margin:12px auto 4px; max-width:320px;}
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--gold),var(--ok)); border-radius:8px; transition:width .4s ease;}
+  .progress-label{ font-size:.8rem; color:var(--wood-dark); font-family:'Baloo 2'; margin-bottom:10px;}
+  .big-problem{
+    font-family:'Baloo 2'; font-weight:800; font-size:2.4rem; color:var(--coral); margin:8px 0 4px;
+  }
+  .btn-big{
+    font-family:'Baloo 2'; font-weight:800; font-size:1.15rem; border:none; cursor:pointer;
+    padding:12px 30px; border-radius:30px; color:#fff; margin:4px;
+    box-shadow:0 4px 0 rgba(0,0,0,.2);
+  }
+  .btn-big:active{ transform:translateY(3px); box-shadow:none;}
+  .btn-check-big{ background:var(--teal); box-shadow:0 4px 0 var(--teal-deep);}
+  .btn-next-big{ background:var(--gold); color:var(--wood-dark); box-shadow:0 4px 0 #b97e26;}
+  .btn-again{ background:var(--coral); box-shadow:0 4px 0 #a53a26;}
+  .star-row{ font-size:1.6rem; letter-spacing:4px; margin:6px 0;}
+  .level-complete{
+    background:linear-gradient(180deg,#FFF7E6,#FBE9C6); border-radius:22px; padding:28px 22px;
+    text-align:center; border:3px dashed var(--gold);
+  }
+  .level-complete .big-emoji{ font-size:3rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img class="hero-logo" src="logo.png" alt="Abacus app mascot" width="130" height="130">
+  <span class="badge">Age 5</span><span class="badge">Age 7</span><span class="badge">No experience needed</span>
+  <h1>Let's Learn the Abacus!</h1>
+  <p class="sub">A step-by-step guide you can read once and teach again and again — with a real interactive abacus built right into the page.</p>
+  <div id="hero-abacus"></div>
+</div>
+
+<div class="learner-bar" id="learnerBar">
+  <span id="learnerStatus" class="learner-status">No learner selected</span>
+  <select id="learnerSelect"><option value="">Choose learner…</option></select>
+  <button class="btn-gold" id="newLearnerToggle">+ New Learner</button>
+  <span class="new-learner-form" id="newLearnerForm">
+    <input type="text" id="newLearnerName" placeholder="Child's name" maxlength="20">
+    <select id="newLearnerAge">
+      <option value="5">Age 5</option>
+      <option value="7">Age 7</option>
+    </select>
+    <button class="btn-gold" id="newLearnerCreate">Create</button>
+  </span>
+  <button class="btn-outline" id="openDashboard">📊 Parent Dashboard</button>
+</div>
+<div class="storage-note">Learner names and scores are saved to your Google Sheet — visible to anyone with the site link, no password. Fine for family use.</div>
+
+<nav class="jump">
+  <a href="#parts">Parts of the Abacus</a>
+  <a href="#counting">Counting (Age 5)</a>
+  <a href="#placevalue">Place Value (Age 7)</a>
+  <a href="#addition">Addition</a>
+  <a href="#subtraction">Subtraction</a>
+  <a href="#practice">Practice &amp; Score</a>
+  <a href="#games">Practice Games</a>
+  <a href="#tips">Teaching Tips</a>
+  <a href="#cheatsheet">Cheat Sheet</a>
+</nav>
+
+<section id="parts">
+  <h2>1. Meet the Abacus</h2>
+  <p>Before any lesson, show your child the abacus above and let them touch it. Point out these three parts:</p>
+  <div class="card">
+    <ul>
+      <li><b>Frame</b> — the wooden border that holds everything together.</li>
+      <li><b>Rods</b> — the straight tracks the beads slide along. Each rod stands for a place: ones, tens, hundreds.</li>
+      <li><b>Beads</b> — the round pieces that slide up and down. Each bead you push up toward the bar is worth <b>1</b>.</li>
+      <li><b>The bar (counting line)</b> — the invisible line near the top. A bead only "counts" once it has been pushed up to touch it.</li>
+    </ul>
+    <div class="tip"><b>Golden Rule:</b> Beads pushed up = counted. Beads left down = not counted yet. That's the entire idea — everything else is just this rule repeated.</div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="counting">
+  <span class="tag five">Start here for your 5-year-old</span>
+  <h2>2. Counting 0–9 on One Rod</h2>
+  <div class="card">
+    <p>Use just <b>one rod</b> to begin. This matches how a 5-year-old already counts on fingers, so it feels familiar.</p>
+    <ol class="steps">
+      <li>Point to the rod. Say: <i>"All the beads are resting down. That means zero."</i></li>
+      <li>Push <b>one</b> bead up. Ask: <i>"How many beads are touching the line now?"</i></li>
+      <li>Push up one more. Count together out loud: "1, 2."</li>
+      <li>Keep going one bead at a time up to 9, counting aloud together each time.</li>
+      <li>Push all the way back down and say "zero" — this teaches that beads can reset.</li>
+    </ol>
+    <div class="say"><b>Say this out loud:</b> "Every bead you push up adds one more. Let's count them together as we push."</div>
+    <div id="counting-abacus"></div>
+    <div class="tip"><b>Practice for 5 years old:</b> Call out a number from 0–9 and ask your child to push up exactly that many beads without counting one-by-one first — just from memory of what the number "looks like" on the rod.</div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="placevalue">
+  <span class="tag seven">Move to this for your 7-year-old</span>
+  <h2>3. Place Value: Ones, Tens, Hundreds</h2>
+  <div class="card">
+    <p>Once counting to 9 on a single rod is easy, add a second rod to its left. This is the biggest "aha" moment of the whole abacus — each rod is worth <b>ten times</b> the rod to its right.</p>
+    <ol class="steps">
+      <li>Label the rightmost rod <b>Ones</b>, the next one <b>Tens</b>, and the next one <b>Hundreds</b> (sticky notes work well under the real abacus).</li>
+      <li>Explain: <i>"A bead on the Ones rod is worth 1. The exact same-looking bead on the Tens rod is secretly worth 10."</i></li>
+      <li>Build the number <b>24</b>: push up 2 beads on the Tens rod, and 4 beads on the Ones rod.</li>
+      <li>Read it together left to right: "2 tens and 4 ones... twenty-four."</li>
+    </ol>
+    <div class="say"><b>Say this out loud:</b> "The rod doesn't change — only its <i>place</i> changes what each bead is worth."</div>
+    <div id="placevalue-abacus"></div>
+    <div class="tip"><b>Practice for 7 years old:</b> Call out numbers like 15, 40, 103 and have your child build them bead-by-bead, then say the number back to you. Also try it backward: build a number silently, and ask them to read it off the beads.</div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="addition">
+  <h2>4. Simple Addition (No Regrouping)</h2>
+  <div class="card">
+    <span class="tag both">Both kids — start simple, then add tens for the 7-year-old</span>
+    <p><b>Example: 3 + 4</b></p>
+    <ol class="steps">
+      <li>Push up 3 beads on the Ones rod. Say: <i>"This is our starting number, 3."</i></li>
+      <li>Now push up 4 <b>more</b> beads on the same rod, counting "4, 5, 6, 7" as you go (continuing from 3).</li>
+      <li>Read the total beads touching the bar: 7. So 3 + 4 = 7.</li>
+    </ol>
+    <div id="addition-abacus"></div>
+    <div class="tip"><b>Key idea:</b> Addition on the abacus is simply "push up more beads and keep counting." There is nothing more complicated happening — this is why it builds real number sense, not memorized tricks.</div>
+  </div>
+
+  <div class="card">
+    <span class="tag seven">Age 7 — the "10 Rule" (regrouping / carrying)</span>
+    <p><b>Example: 7 + 5</b></p>
+    <p>Here the Ones rod runs out of room — there are only 9 beads. This is where the second rod earns its job.</p>
+    <ol class="steps">
+      <li>Push up 7 beads on the Ones rod.</li>
+      <li>Try to push 5 more — but only 2 beads are left! Push those 2 up (now the rod shows 9).</li>
+      <li>You still owe 3 more beads, but the rod is full. Here's the trick: <b>push all 9 Ones beads back down to zero, and instead push up 1 bead on the Tens rod.</b> Ten ones became one ten.</li>
+      <li>Now push up the 3 beads you still owed, onto the now-empty Ones rod.</li>
+      <li>Read the result: 1 ten and 2 ones = <b>12</b>.</li>
+    </ol>
+    <div class="say"><b>Say this out loud:</b> "Ten little beads on one rod always trade for one big bead on the rod next door."</div>
+    <div id="carry-abacus"></div>
+    <div class="tip"><b>Practice for 7 years old:</b> Try 8+6, 9+9, and 6+7. Every time the Ones rod would need to pass 9, stop and do the "trade": clear the Ones rod, add 1 to Tens, then finish counting the remainder onto Ones.</div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="subtraction">
+  <h2>5. Simple Subtraction</h2>
+  <div class="card">
+    <span class="tag both">Both kids</span>
+    <p><b>Example: 8 − 3</b></p>
+    <ol class="steps">
+      <li>Push up 8 beads on the Ones rod. Say: <i>"This is what we're starting with."</i></li>
+      <li>Push <b>down</b> 3 of those beads, counting "8 down to 7, 6, 5" as each one drops.</li>
+      <li>Count what's still touching the bar: 5. So 8 − 3 = 5.</li>
+    </ol>
+    <div id="subtraction-abacus"></div>
+  </div>
+  <div class="card">
+    <span class="tag seven">Age 7 — borrowing</span>
+    <p><b>Example: 12 − 5</b></p>
+    <ol class="steps">
+      <li>Build 12: 1 bead on Tens, 2 beads on Ones.</li>
+      <li>You need to take away 5, but the Ones rod only has 2 beads on it — not enough!</li>
+      <li>Trade the other way: push the 1 Tens bead back down, and instead push up all 10 beads on the Ones rod (10 ones = the ten you borrowed). Ones rod now shows 12... wait, that's too many — so really: clear the Tens bead, and add 10 beads worth to Ones, giving Ones a total of 12 beads' worth of counting room to work with.</li>
+      <li>Now take away 5 from that: count down from 12 to 7.</li>
+      <li>Result: <b>7</b>.</li>
+    </ol>
+    <div class="tip"><b>Simplify for a first lesson:</b> Borrowing is the hardest abacus skill — many 7-year-olds aren't ready until they're very confident with addition regrouping first. Feel free to skip borrowing for a few weeks and revisit it later.</div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="practice">
+  <h2>6. Practice Adventure 🚀</h2>
+  <p>Pick or create a learner above, then climb through 5 fun levels — one at a time. Get a question right, tap <b>Next</b>, and keep going!</p>
+
+  <div id="practiceLocked" class="locked-msg">👆 Choose or create a learner above to start the adventure!</div>
+
+  <div id="practiceArea" style="display:none;">
+    <div class="journey-map" id="journeyMap"></div>
+
+    <!-- Active question card -->
+    <div class="level-card" id="levelCard">
+      <div class="star-row" id="levelStars"></div>
+      <h3 id="levelTitle"></h3>
+      <div class="level-sub" id="levelSub"></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+
+      <div class="big-problem" id="bigProblem"></div>
+      <div id="exerciseAbacus"></div>
+
+      <div id="questionControls">
+        <button class="btn-big btn-check-big" id="checkBtn">✓ Check</button>
+        <button class="btn-big btn-next-big" id="nextBtn" style="display:none;">Next ➜</button>
+        <button class="btn-big btn-again" id="tryAgainBtn" style="display:none;">Try Again</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- Level-complete card -->
+    <div class="level-complete" id="levelComplete" style="display:none;">
+      <div class="big-emoji">🏆</div>
+      <h3 id="completeTitle">Level Complete!</h3>
+      <div class="star-row" id="completeStars"></div>
+      <p id="completeMsg"></p>
+      <button class="btn-big btn-next-big" id="nextLevelBtn">Next Level ➜</button>
+      <button class="btn-big btn-check-big" id="replayLevelBtn">Play Again</button>
+    </div>
+
+    <!-- Whole-journey-done card -->
+    <div class="level-complete" id="journeyComplete" style="display:none;">
+      <div class="big-emoji">🌟🎉🌟</div>
+      <h3>You finished the whole adventure!</h3>
+      <p>Amazing work! You can replay any level from the map above, or start again from the top.</p>
+      <button class="btn-big btn-next-big" id="restartJourneyBtn">Start Over</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="games">
+  <h2>7. Practice Games</h2>
+  <div class="game-grid">
+    <div class="game-card">
+      <h3>Race to 20 <span class="tag five">Age 5</span></h3>
+      <p>Take turns pushing up 1 or 2 beads at a time on a single rod (using two rods once you pass 9). Whoever pushes the bead that reaches exactly 20 wins.</p>
+    </div>
+    <div class="game-card">
+      <h3>Guess My Number <span class="tag seven">Age 7</span></h3>
+      <p>Build a number on the Tens and Ones rods while your child isn't looking. They open their eyes and must read the number from the beads alone.</p>
+    </div>
+    <div class="game-card">
+      <h3>Bead Flash <span class="tag both">Both</span></h3>
+      <p>Push up a number of beads for one second, then cover the abacus. Ask "how many did you see?" Great for building instant number recognition.</p>
+    </div>
+    <div class="game-card">
+      <h3>Ten Trade Hunt <span class="tag seven">Age 7</span></h3>
+      <p>Call out addition problems that require a "10 trade" (7+6, 8+9, 6+8...). Every correct trade earns a sticker.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="tips">
+  <h2>8. Tips for Teaching Two Different Ages Together</h2>
+  <div class="card">
+    <ul>
+      <li><b>Keep sessions short:</b> 10–15 minutes is plenty for a 5-year-old; 15–20 minutes for a 7-year-old. Stop while it's still fun.</li>
+      <li><b>Teach the 5-year-old first, let the 7-year-old "assist":</b> Older kids love being the helper — this reinforces their own skills while you teach the younger one.</li>
+      <li><b>Always say the number out loud while moving beads.</b> The verbal count links the physical action to the abstract number.</li>
+      <li><b>Common mistake to watch for:</b> kids pushing beads up without counting them — always pause and ask "how many is that?" instead of assuming they're tracking it.</li>
+      <li><b>Don't rush to addition.</b> A child who can instantly recognize any number 0–9 on the beads (without recounting from zero) is ready for addition. Not before.</li>
+      <li><b>Praise the process, not just correct answers</b> — "I like how you counted out loud" matters more than a right result at this stage.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider">• • •</div>
+
+<section id="cheatsheet">
+  <h2>9. Quick Reference Cheat Sheet</h2>
+  <div class="card">
+    <table class="cheat">
+      <tr><th>Rule</th><th>What it means</th></tr>
+      <tr><td>Bead up = counted</td><td>Only beads pushed toward the bar are part of the number</td></tr>
+      <tr><td>One rod = one place</td><td>Rightmost = ones, next = tens, next = hundreds</td></tr>
+      <tr><td>Same bead, different worth</td><td>A bead's value depends only on which rod it's on</td></tr>
+      <tr><td>10 Rule (adding)</td><td>10 beads on one rod = clear it, add 1 bead to the next rod over</td></tr>
+      <tr><td>Borrow Rule (subtracting)</td><td>Not enough beads to take away? Trade 1 bead from the next rod over for 10 beads here</td></tr>
+    </table>
+  </div>
+  <div class="tip"><b>Suggested order of lessons:</b> Parts of the abacus → counting 0–9 → recognizing numbers instantly → two-rod place value → simple addition → 10-Rule addition → simple subtraction → borrowing (later).</div>
+</section>
+
+<div class="modal-overlay" id="dashboardOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="closeDashboard">Close</button>
+    <h2>📊 Parent Dashboard</h2>
+    <p style="font-size:.9rem;color:var(--wood-dark);">Progress for every learner who has practiced on this page.</p>
+    <div id="dashboardContent">Loading…</div>
+  </div>
+</div>
+
+<footer>Made for teaching time with your two kids. Print this page or keep it open beside the real abacus. 🧮</footer>
+
+<canvas id="celebrateCanvas"></canvas>
+<div class="cheer-banner" id="cheerBanner">🎉 Great job! 👏</div>
+
+<script>
+function createAbacus(containerId, places, options){
+  options = options || {};
+  const beadsPerRod = options.beadsPerRod || 9;
+  const showTotal = options.showTotal !== false;
+  const container = (typeof containerId === 'string') ? document.getElementById(containerId) : containerId;
+  const wrap = document.createElement('div');
+  wrap.className = 'abacus-wrap';
+
+  const frame = document.createElement('div');
+  frame.className = 'abacus-frame';
+
+  const state = places.map(()=>0); // active bead count per rod
+
+  const rodColors = {1:'#D6533B', 10:'#1F6F6B', 100:'#E8A33D'};
+
+  // Create the readout element BEFORE building rods, because each rod's
+  // render() call fires immediately during setup and calls updateReadout(),
+  // which needs `readout` to already exist.
+  let readout = null;
+  if(showTotal){
+    readout = document.createElement('div');
+    readout.className = 'abacus-readout';
+    readout.innerHTML = '<span class="num">0</span><span class="lbl">TAP THE BEADS</span>';
+  }
+
+  places.forEach((place, idx)=>{
+    const block = document.createElement('div');
+    block.className = 'rod-block';
+
+    const label = document.createElement('div');
+    label.className = 'rod-label';
+    label.textContent = place===1?'Ones':place===10?'Tens':place===100?'Hundreds':('x'+place);
+    block.appendChild(label);
+
+    const rod = document.createElement('div');
+    rod.className = 'rod';
+
+    const barLine = document.createElement('div');
+    barLine.className = 'bar-line';
+    rod.appendChild(barLine);
+
+    const zoneActive = document.createElement('div');
+    zoneActive.className = 'zone zone-active';
+    const zoneInactive = document.createElement('div');
+    zoneInactive.className = 'zone zone-inactive';
+
+    const beads = [];
+    for(let i=0;i<beadsPerRod;i++){
+      const bead = document.createElement('div');
+      bead.className = 'bead';
+      bead.style.setProperty('--bead-color', rodColors[place] || '#888');
+      bead.addEventListener('click', ()=>{
+        state[idx] = (state[idx] === i+1) ? i : i+1;
+        render();
+      });
+      beads.push(bead);
+    }
+
+    rod.appendChild(zoneActive);
+    rod.appendChild(zoneInactive);
+    block.appendChild(rod);
+
+    const total = document.createElement('div');
+    total.className = 'rod-total';
+    block.appendChild(total);
+
+    frame.appendChild(block);
+
+    function render(){
+      zoneActive.innerHTML = '';
+      zoneInactive.innerHTML = '';
+      beads.forEach((bead, i)=>{
+        // beads ordered top(0, near bar) .. bottom(last)
+        if(i < state[idx]){
+          zoneActive.appendChild(bead);
+        } else {
+          zoneInactive.appendChild(bead);
+        }
+      });
+      total.textContent = state[idx];
+      updateReadout();
+    }
+    block._render = render;
+    block._reset = ()=>{ state[idx]=0; render(); };
+    render();
+  });
+
+  wrap.appendChild(frame);
+
+  if(showTotal){
+    wrap.appendChild(readout);
+  }
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.textContent = 'Reset';
+  resetBtn.addEventListener('click', ()=>{
+    frame.querySelectorAll('.rod-block').forEach((b)=>b._reset && b._reset());
+  });
+  wrap.appendChild(resetBtn);
+
+  function currentTotal(){
+    let total = 0;
+    places.forEach((place, idx)=> total += state[idx]*place );
+    return total;
+  }
+
+  function updateReadout(){
+    const total = currentTotal();
+    if(showTotal){
+      readout.querySelector('.num').textContent = total;
+      readout.querySelector('.lbl').textContent = total===0 ? 'TAP THE BEADS' : 'CURRENT NUMBER';
+    }
+    if(typeof options.onChange === 'function') options.onChange(total);
+  }
+
+  container.appendChild(wrap);
+
+  return {
+    getTotal: currentTotal,
+    reset: function(){ frame.querySelectorAll('.rod-block').forEach((b)=>b._reset && b._reset()); }
+  };
+}
+
+createAbacus('hero-abacus', [100,10,1]);
+createAbacus('counting-abacus', [1]);
+createAbacus('placevalue-abacus', [100,10,1]);
+createAbacus('addition-abacus', [10,1]);
+createAbacus('carry-abacus', [10,1]);
+createAbacus('subtraction-abacus', [10,1]);
+
+/* =========================================================
+   CONFIG — paste your deployed Google Apps Script Web App URL here
+   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbxLfYmnf3AGfxlcyBu8z4HjIX6xEzIhzqfgso435ydQEeINOCY-7ISERrX5l_jn4uI/exec";
+
+/* =========================================================
+   CELEBRATION: confetti + synthesized applause
+   ========================================================= */
+const celebrateCanvas = document.getElementById('celebrateCanvas');
+const cheerBanner = document.getElementById('cheerBanner');
+let confettiPieces = [];
+let confettiRunning = false;
+
+function resizeCelebrateCanvas(){
+  celebrateCanvas.width = window.innerWidth;
+  celebrateCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCelebrateCanvas);
+resizeCelebrateCanvas();
+
+function celebrate(){
+  // Confetti burst
+  const ctx = celebrateCanvas.getContext('2d');
+  celebrateCanvas.style.display = 'block';
+  const colors = ['#D6533B','#1F6F6B','#E8A33D','#3F8F5B','#F6C453'];
+  confettiPieces = [];
+  for(let i=0;i<90;i++){
+    confettiPieces.push({
+      x: Math.random()*celebrateCanvas.width,
+      y: -20 - Math.random()*200,
+      w: 6+Math.random()*6,
+      h: 8+Math.random()*8,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      speed: 2+Math.random()*3,
+      drift: -1+Math.random()*2,
+      rot: Math.random()*360,
+      rotSpeed: -6+Math.random()*12
+    });
+  }
+  confettiRunning = true;
+  const startTime = Date.now();
+  function frame(){
+    ctx.clearRect(0,0,celebrateCanvas.width, celebrateCanvas.height);
+    confettiPieces.forEach(p=>{
+      p.y += p.speed; p.x += p.drift; p.rot += p.rotSpeed;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if(Date.now()-startTime < 1600 && confettiRunning){
+      requestAnimationFrame(frame);
+    } else {
+      ctx.clearRect(0,0,celebrateCanvas.width, celebrateCanvas.height);
+      celebrateCanvas.style.display = 'none';
+      confettiRunning = false;
+    }
+  }
+  requestAnimationFrame(frame);
+
+  // Cheer banner
+  const phrases = ['🎉 Great job! 👏','⭐ Awesome! ⭐','👏 You did it! 👏','🥳 Correct! 🥳'];
+  cheerBanner.textContent = phrases[Math.floor(Math.random()*phrases.length)];
+  cheerBanner.classList.add('show');
+  setTimeout(()=> cheerBanner.classList.remove('show'), 1100);
+
+  playApplause();
+}
+
+let audioCtx = null;
+function unlockAudioOnce(){
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ /* no audio support */ }
+  } else if(audioCtx.state === 'suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
+  document.removeEventListener('click', unlockAudioOnce);
+  document.removeEventListener('touchstart', unlockAudioOnce);
+}
+document.addEventListener('click', unlockAudioOnce);
+document.addEventListener('touchstart', unlockAudioOnce);
+
+function playApplause(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    const clapCount = 14;
+    for(let i=0;i<clapCount;i++){
+      const t = now + Math.random()*0.9;
+      const bufferSize = audioCtx.sampleRate * 0.06;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for(let j=0;j<bufferSize;j++){ data[j] = (Math.random()*2-1) * (1 - j/bufferSize); }
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      const bandpass = audioCtx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.frequency.value = 1500 + Math.random()*800;
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.35 + Math.random()*0.15, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+      noise.connect(bandpass); bandpass.connect(gain); gain.connect(audioCtx.destination);
+      noise.start(t); noise.stop(t + 0.1);
+    }
+  }catch(e){ /* audio not available — celebration still shows visually */ }
+}
+
+/* =========================================================
+   LEARNER SIGN-IN, GRADED EXERCISES, PARENT DASHBOARD
+   (backed by Google Apps Script + Google Sheets)
+   ========================================================= */
+(function(){
+  let currentLearner = null; // {name, age}
+  let learners = []; // [{name, age, createdAt}]
+
+  const learnerSelect = document.getElementById('learnerSelect');
+  const learnerStatus = document.getElementById('learnerStatus');
+  const newLearnerToggle = document.getElementById('newLearnerToggle');
+  const newLearnerForm = document.getElementById('newLearnerForm');
+  const newLearnerName = document.getElementById('newLearnerName');
+  const newLearnerAge = document.getElementById('newLearnerAge');
+  const newLearnerCreate = document.getElementById('newLearnerCreate');
+  const practiceLocked = document.getElementById('practiceLocked');
+  const practiceArea = document.getElementById('practiceArea');
+  const openDashboard = document.getElementById('openDashboard');
+  const closeDashboard = document.getElementById('closeDashboard');
+  const dashboardOverlay = document.getElementById('dashboardOverlay');
+  const dashboardContent = document.getElementById('dashboardContent');
+
+  async function apiGet(params){
+    if(!API_URL || API_URL.indexOf('PASTE_YOUR') === 0){
+      throw new Error('API_URL not configured yet');
+    }
+    const url = API_URL + '?' + new URLSearchParams(params).toString();
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('Network error: ' + res.status);
+    return await res.json();
+  }
+
+  async function loadLearners(){
+    try{
+      const data = await apiGet({action:'listLearners'});
+      learners = data.learners || [];
+      learnerStatus.textContent = 'No learner selected';
+    }catch(e){
+      learners = [];
+      learnerStatus.textContent = '⚠️ Backend not connected yet — set API_URL in the code';
+    }
+    renderLearnerSelect();
+  }
+
+  function renderLearnerSelect(){
+    learnerSelect.innerHTML = '<option value="">Choose learner…</option>';
+    learners.forEach(l=>{
+      const opt = document.createElement('option');
+      opt.value = l.name;
+      opt.textContent = l.name + ' (age ' + l.age + ')';
+      learnerSelect.appendChild(opt);
+    });
+  }
+
+  newLearnerToggle.addEventListener('click', ()=>{
+    newLearnerForm.classList.toggle('open');
+  });
+
+  newLearnerCreate.addEventListener('click', async ()=>{
+    const name = newLearnerName.value.trim();
+    if(!name){ return; }
+    const age = newLearnerAge.value;
+    newLearnerCreate.disabled = true;
+    newLearnerCreate.textContent = 'Creating…';
+    try{
+      const data = await apiGet({action:'createLearner', name, age});
+      learners = data.learners || learners;
+      renderLearnerSelect();
+      learnerSelect.value = name;
+      newLearnerName.value = '';
+      newLearnerForm.classList.remove('open');
+      await selectLearner(name, age);
+    }catch(e){
+      alert('Could not reach the backend. Check that API_URL is set to your deployed Apps Script URL.');
+    }
+    newLearnerCreate.disabled = false;
+    newLearnerCreate.textContent = 'Create';
+  });
+
+  learnerSelect.addEventListener('change', ()=>{
+    if(learnerSelect.value){
+      const info = learners.find(l=>l.name === learnerSelect.value);
+      selectLearner(learnerSelect.value, info ? info.age : '');
+    }
+  });
+
+  async function selectLearner(name, age){
+    currentLearner = {name, age};
+    learnerStatus.textContent = 'Practicing as ' + name + ' 👋';
+    practiceLocked.style.display = 'none';
+    practiceArea.style.display = 'block';
+    await loadProgressAndRenderExercises();
+  }
+
+  /* ---------- Level Journey engine ---------- */
+  const QUESTIONS_PER_LEVEL = 5;
+
+  const LEVELS = [
+    { key:'counting',       icon:'🔢', title:'Counting 0–9',        sub:'Push up the right number of beads', places:[1],
+      gen: ()=>{ const a = randInt(1,9); return {text:'Show the number  '+a, target:a}; } },
+    { key:'placevalue',     icon:'🏠', title:'Tens & Ones',          sub:'Build the two-digit number', places:[10,1],
+      gen: ()=>{ const a = randInt(10,99); return {text:'Build  '+a, target:a}; } },
+    { key:'additionSimple', icon:'➕', title:'Easy Adding',          sub:'Add and show the answer', places:[1],
+      gen: ()=>{ const a = randInt(0,5), b = randInt(0, 9-a); return {text:a+'  +  '+b+'  =  ?', target:a+b}; } },
+    { key:'additionCarry',  icon:'🔟', title:'The 10 Rule',          sub:'Adding past nine — use the Tens rod', places:[10,1],
+      gen: ()=>{ let a,b; do{ a=randInt(1,9); b=randInt(1,9);}while(a+b<=9); return {text:a+'  +  '+b+'  =  ?', target:a+b}; } },
+    { key:'subtraction',    icon:'➖', title:'Taking Away',          sub:'Subtract and show what is left', places:[1],
+      gen: ()=>{ const a = randInt(1,9), b = randInt(0,a); return {text:a+'  −  '+b+'  =  ?', target:a-b}; } }
+  ];
+
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  function defaultExercises(){
+    const p = {};
+    LEVELS.forEach(l=> p[l.key] = {attempted:0, correct:0});
+    return p;
+  }
+
+  // DOM refs for the journey
+  const journeyMap = document.getElementById('journeyMap');
+  const levelCard = document.getElementById('levelCard');
+  const levelStars = document.getElementById('levelStars');
+  const levelTitle = document.getElementById('levelTitle');
+  const levelSub = document.getElementById('levelSub');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const bigProblem = document.getElementById('bigProblem');
+  const exerciseAbacus = document.getElementById('exerciseAbacus');
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const tryAgainBtn = document.getElementById('tryAgainBtn');
+  const feedbackEl = document.getElementById('feedback');
+  const levelCompleteEl = document.getElementById('levelComplete');
+  const completeStars = document.getElementById('completeStars');
+  const completeMsg = document.getElementById('completeMsg');
+  const nextLevelBtn = document.getElementById('nextLevelBtn');
+  const replayLevelBtn = document.getElementById('replayLevelBtn');
+  const journeyCompleteEl = document.getElementById('journeyComplete');
+  const restartJourneyBtn = document.getElementById('restartJourneyBtn');
+
+  let progressData = defaultExercises();
+  let currentLevelIndex = 0;
+  let questionNum = 0;       // 0-based within the level
+  let levelCorrectCount = 0;
+  let currentAbacus = null;
+  let currentTarget = null;
+
+  async function loadProgressAndRenderExercises(){
+    try{
+      const data = await apiGet({action:'getProgress', name: currentLearner.name});
+      progressData = data.exercises || defaultExercises();
+    }catch(e){
+      progressData = defaultExercises();
+    }
+    // Start at the first level that isn't "mastered" yet, else level 0
+    currentLevelIndex = 0;
+    for(let i=0;i<LEVELS.length;i++){
+      const p = progressData[LEVELS[i].key];
+      if(p && p.correct >= QUESTIONS_PER_LEVEL){ currentLevelIndex = Math.min(i+1, LEVELS.length-1); }
+      else break;
+    }
+    startLevel(currentLevelIndex);
+  }
+
+  function renderJourneyMap(){
+    journeyMap.innerHTML = '';
+    LEVELS.forEach((lvl, i)=>{
+      const dot = document.createElement('div');
+      const mastered = (progressData[lvl.key].correct >= QUESTIONS_PER_LEVEL);
+      let cls = 'level-dot';
+      if(i === currentLevelIndex) cls += ' current';
+      else if(mastered) cls += ' done';
+      else if(i > currentLevelIndex) cls += ' locked';
+      dot.className = cls;
+      dot.innerHTML = '<div class="circle">'+(mastered && i!==currentLevelIndex ? '✔' : lvl.icon)+'</div><div>'+lvl.title+'</div>';
+      dot.addEventListener('click', ()=>{
+        // allow jumping to any unlocked (current or mastered) level
+        if(i <= currentLevelIndex || mastered){ currentLevelIndex = i; startLevel(i); }
+      });
+      journeyMap.appendChild(dot);
+    });
+  }
+
+  function startLevel(index){
+    currentLevelIndex = index;
+    questionNum = 0;
+    levelCorrectCount = 0;
+    levelCard.style.display = 'block';
+    levelCompleteEl.style.display = 'none';
+    journeyCompleteEl.style.display = 'none';
+    const lvl = LEVELS[index];
+    levelTitle.textContent = 'Level ' + (index+1) + ': ' + lvl.title;
+    levelSub.textContent = lvl.sub;
+    renderJourneyMap();
+    nextQuestion();
+  }
+
+  function nextQuestion(){
+    const lvl = LEVELS[currentLevelIndex];
+    const q = lvl.gen();
+    currentTarget = q.target;
+
+    bigProblem.textContent = q.text;
+    exerciseAbacus.innerHTML = '';
+    currentAbacus = createAbacus(exerciseAbacus, lvl.places, {beadsPerRod:9});
+
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    checkBtn.style.display = 'inline-block';
+    checkBtn.disabled = false;
+    nextBtn.style.display = 'none';
+    tryAgainBtn.style.display = 'none';
+
+    // stars for this level so far
+    levelStars.textContent = '⭐'.repeat(levelCorrectCount) + '·'.repeat(QUESTIONS_PER_LEVEL - levelCorrectCount);
+    updateProgress();
+  }
+
+  function updateProgress(){
+    const pct = Math.round((questionNum / QUESTIONS_PER_LEVEL) * 100);
+    progressFill.style.width = pct + '%';
+    progressLabel.textContent = 'Question ' + Math.min(questionNum+1, QUESTIONS_PER_LEVEL) + ' of ' + QUESTIONS_PER_LEVEL;
+  }
+
+  checkBtn.onclick = async ()=>{
+    const total = currentAbacus.getTotal();
+    const isCorrect = (total === currentTarget);
+    checkBtn.disabled = true;
+    const catKey = LEVELS[currentLevelIndex].key;
+    try{
+      const data = await apiGet({action:'saveProgress', name: currentLearner.name, category: catKey, correct: isCorrect ? '1' : '0'});
+      if(data.exercises) progressData = data.exercises;
+    }catch(e){
+      progressData[catKey].attempted++;
+      if(isCorrect) progressData[catKey].correct++;
+    }
+
+    if(isCorrect){
+      levelCorrectCount++;
+      questionNum++;
+      levelStars.textContent = '⭐'.repeat(levelCorrectCount) + '·'.repeat(Math.max(0,QUESTIONS_PER_LEVEL - levelCorrectCount));
+      feedbackEl.textContent = '🎉 Correct! That\'s ' + currentTarget + '.';
+      feedbackEl.className = 'feedback correct';
+      celebrate();
+      checkBtn.style.display = 'none';
+      if(questionNum >= QUESTIONS_PER_LEVEL){
+        nextBtn.textContent = 'Finish Level ➜';
+      } else {
+        nextBtn.textContent = 'Next ➜';
+      }
+      nextBtn.style.display = 'inline-block';
+      updateProgress();
+    } else {
+      feedbackEl.textContent = 'Not yet — you built ' + total + '. Have another go!';
+      feedbackEl.className = 'feedback wrong';
+      checkBtn.style.display = 'none';
+      tryAgainBtn.style.display = 'inline-block';
+    }
+  };
+
+  tryAgainBtn.onclick = ()=>{
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    currentAbacus.reset();
+    checkBtn.style.display = 'inline-block';
+    checkBtn.disabled = false;
+    tryAgainBtn.style.display = 'none';
+  };
+
+  nextBtn.onclick = ()=>{
+    if(questionNum >= QUESTIONS_PER_LEVEL){
+      finishLevel();
+    } else {
+      nextQuestion();
+    }
+  };
+
+  function finishLevel(){
+    levelCard.style.display = 'none';
+    const isLast = (currentLevelIndex >= LEVELS.length - 1);
+    renderJourneyMap();
+    if(isLast){
+      levelCompleteEl.style.display = 'none';
+      journeyCompleteEl.style.display = 'block';
+    } else {
+      completeStars.textContent = '⭐'.repeat(QUESTIONS_PER_LEVEL);
+      completeMsg.textContent = 'You mastered "' + LEVELS[currentLevelIndex].title + '"! Ready for the next challenge?';
+      nextLevelBtn.textContent = 'Level ' + (currentLevelIndex+2) + ': ' + LEVELS[currentLevelIndex+1].title + ' ➜';
+      levelCompleteEl.style.display = 'block';
+    }
+    celebrate();
+  }
+
+  nextLevelBtn.onclick = ()=>{ startLevel(Math.min(currentLevelIndex+1, LEVELS.length-1)); };
+  replayLevelBtn.onclick = ()=>{ startLevel(currentLevelIndex); };
+  restartJourneyBtn.onclick = ()=>{ startLevel(0); };
+
+  /* ---------- Parent Dashboard ---------- */
+  openDashboard.addEventListener('click', async ()=>{
+    dashboardOverlay.classList.add('open');
+    dashboardContent.textContent = 'Loading…';
+    await renderDashboard();
+  });
+  closeDashboard.addEventListener('click', ()=> dashboardOverlay.classList.remove('open'));
+  dashboardOverlay.addEventListener('click', (e)=>{ if(e.target === dashboardOverlay) dashboardOverlay.classList.remove('open'); });
+
+  async function renderDashboard(){
+    try{
+      const data = await apiGet({action:'dashboard'});
+      const rows = data.learners || [];
+      if(rows.length === 0){
+        dashboardContent.innerHTML = '<p>No learners yet — create one using the bar at the top of the page.</p>';
+        return;
+      }
+      let html = '<table class="dash"><tr><th>Learner</th><th>Age</th><th>Counting</th><th>Place Value</th><th>Add (simple)</th><th>Add (10 rule)</th><th>Subtract</th><th>Total</th><th>Last active</th></tr>';
+      rows.forEach(r=>{
+        const ex = r.exercises || defaultExercises();
+        let totalCorrect=0, totalAttempted=0;
+        Object.values(ex).forEach(v=>{ totalCorrect+=v.correct; totalAttempted+=v.attempted; });
+        const lastActive = r.lastActive ? new Date(r.lastActive).toLocaleDateString() : '—';
+        html += '<tr><td>'+r.name+'</td><td>'+r.age+'</td>'
+          + '<td>'+ex.counting.correct+'/'+ex.counting.attempted+'</td>'
+          + '<td>'+ex.placevalue.correct+'/'+ex.placevalue.attempted+'</td>'
+          + '<td>'+ex.additionSimple.correct+'/'+ex.additionSimple.attempted+'</td>'
+          + '<td>'+ex.additionCarry.correct+'/'+ex.additionCarry.attempted+'</td>'
+          + '<td>'+ex.subtraction.correct+'/'+ex.subtraction.attempted+'</td>'
+          + '<td><b>'+totalCorrect+'/'+totalAttempted+'</b></td>'
+          + '<td>'+lastActive+'</td></tr>';
+      });
+      html += '</table>';
+      dashboardContent.innerHTML = html;
+    }catch(e){
+      dashboardContent.textContent = 'Could not load progress — check that API_URL is set correctly.';
+    }
+  }
+
+  loadLearners();
+})();
+
+/* Register service worker (enables Add to Home Screen on Android) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* offline install optional */ });
+  });
+}
+</script>
+
+</body>
+</html>
